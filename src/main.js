@@ -3,94 +3,106 @@ import MicroModal from 'micromodal';
 import utc from "dayjs/plugin/utc"
 import timezone from "dayjs/plugin/timezone";
 
-const timezoneSelect = document.querySelector("select");
-const applyTimezoneButton = document.querySelector(".apply");
-const timeZoneName = document.querySelector(".timezone")
+document.addEventListener("DOMContentLoaded", () => {
 
-applyTimezoneButton.addEventListener("click", () => {
-  let timeZone = timezoneSelect.value;
-  console.log(timeZone)
-  showDate(timeZone);
-})
+  const timezoneSelect = document.querySelector("select");
+  const applyTimezoneButton = document.querySelector(".apply");
+  const timeZoneName = document.querySelector(".timezone")
 
-const currentTimeEl = document.querySelector(".current-time");
-const currentDateEl = document.querySelector(".current-date");
+  /* When you want to change the country, it is passed 
+    as a value to the showDate function parameter */
+  applyTimezoneButton.addEventListener("click", () => {
+    let timeZone = timezoneSelect.value;
+    showDate(timeZone);
+  })
 
-const now = dayjs();
+  const currentTimeEl = document.querySelector(".current-time");
+  const currentDateEl = document.querySelector(".current-date");
 
-let date = now.date()
-let day = now.day()
-let month = now.month() + 1
-let year = now.year()
+  const now = dayjs();
 
-function formatDateTime(dayWeek, day, month, year) {
-  let dateDa;
-  let dateMonth;
+  let date = now.date()
+  let day = now.day()
+  let month = now.month() + 1
+  let year = now.year()
 
-  if (dayWeek === 1) {
-    dateDa = "Monday";
-  } else if (dayWeek === 2) {
-    dateDa = "Tuesday";
-  } else if (dayWeek === 3) {
-    dateDa = "Wednesday";
-  } else if (dayWeek === 4) {
-    dateDa = "Thursday";
-  } else if (dayWeek === 5) {
-    dateDa = "Friday";
-  } else if (dayWeek === 6) {
-    dateDa = "Saturday";
-  } else if (dayWeek === 7) {
-    dateDa = "Sunday";
+  // formated date time
+  function formatDateTime(dayWeek, day, month, year) {
+    let dateDa;
+    let dateMonth;
+
+    // Search day week
+    if (dayWeek === 1) {
+      dateDa = "Monday";
+    } else if (dayWeek === 2) {
+      dateDa = "Tuesday";
+    } else if (dayWeek === 3) {
+      dateDa = "Wednesday";
+    } else if (dayWeek === 4) {
+      dateDa = "Thursday";
+    } else if (dayWeek === 5) {
+      dateDa = "Friday";
+    } else if (dayWeek === 6) {
+      dateDa = "Saturday";
+    } else if (dayWeek === 7) {
+      dateDa = "Sunday";
+    };
+
+    // Search Day month
+    if (month === 1) {
+      dateMonth = "January";
+    } else if (month === 2) {
+      dateMonth = "February";
+    } else if (month === 3) {
+      dateMonth = "March";
+    } else if (month === 4) {
+      dateMonth = "April";
+    } else if (month === 5) {
+      dateMonth = "May";
+    } else if (month === 6) {
+      dateMonth = "June";
+    } else if (month === 7) {
+      dateMonth = "July";
+    } else if (month === 8) {
+      dateMonth = "August";
+    } else if (month === 9) {
+      dateMonth = "September";
+    } else if (month === 10) {
+      dateMonth = "October";
+    } else if (month === 11) {
+      dateMonth = "November";
+    } else if (month === 12) {
+      dateMonth = "December";
+    }
+
+    // return formated data
+    return `${dateDa}, ${day} ${dateMonth}, ${year}`;
   };
 
-  if (month === 1) {
-    dateMonth = "January";
-  } else if (month === 2) {
-    dateMonth = "February";
-  } else if (month === 3) {
-    dateMonth = "March";
-  } else if (month === 4) {
-    dateMonth = "April";
-  } else if (month === 5) {
-    dateMonth = "May";
-  } else if (month === 6) {
-    dateMonth = "June";
-  } else if (month === 7) {
-    dateMonth = "July";
-  } else if (month === 8) {
-    dateMonth = "August";
-  } else if (month === 9) {
-    dateMonth = "September";
-  } else if (month === 10) {
-    dateMonth = "October";
-  } else if (month === 11) {
-    dateMonth = "November";
-  } else if (month === 12) {
-    dateMonth = "December";
-  }
 
-  return `${dateDa}, ${day} ${dateMonth}, ${year}`;
-};
+  // take a zone like parameter and add the textContent
+  function showDate(zone = "America/Caracas") {
+    dayjs.extend(utc);
+    dayjs.extend(timezone);
+
+    // Format hour  and date
+    let hour = dayjs().tz(zone).format("HH:mm:ss");
+    let date = dayjs().tz(zone).format("d DD-MM-YYYY");
+
+    let dayWeek = parseInt(date.slice(0));
+    let day = parseInt(date.slice(2, 4));
+    let month = parseInt(date.slice(5, 7));
+    let year = parseInt(date.slice(8, 12));
+
+    let formatDate = formatDateTime(dayWeek, day, month, year);
+
+    // Add hour and date format
+    currentTimeEl.textContent = hour;
+    currentDateEl.textContent = formatDate;
+    timeZoneName.textContent = zone.split("_").join(" ");
+  };
 
 
-function showDate(zone = "America/Caracas") {
-  dayjs.extend(utc);
-  dayjs.extend(timezone);
-
-  let hour = dayjs().tz(zone).format("HH:mm:ss");
-  let date = dayjs().tz(zone).format("d DD-MM-YYYY");
-
-  let dayWeek = parseInt(date.slice(0));
-  let day = parseInt(date.slice(2, 4));
-  let month = parseInt(date.slice(5, 7));
-  let year = parseInt(date.slice(8, 12));
-
-  let formatDate = formatDateTime(dayWeek, day, month, year);
-
-  currentTimeEl.textContent = hour;
-  currentDateEl.textContent = formatDate;
-  timeZoneName.textContent = zone.split("_").join(" ");
-};
-
-showDate();
-MicroModal.init();
+  showDate();
+  MicroModal.init();
+});
