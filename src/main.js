@@ -1,31 +1,45 @@
 import dayjs from "dayjs"
+import MicroModal from 'micromodal';
+import utc from "dayjs/plugin/utc"
+import timezone from "dayjs/plugin/timezone";
+
+const timezoneSelect = document.querySelector("select");
+const applyTimezoneButton = document.querySelector(".apply");
+const timeZoneName = document.querySelector(".timezone")
+
+applyTimezoneButton.addEventListener("click", () => {
+  let timeZone = timezoneSelect.value;
+  console.log(timeZone)
+  showDate(timeZone);
+})
 
 const currentTimeEl = document.querySelector(".current-time");
 const currentDateEl = document.querySelector(".current-date");
 
 const now = dayjs();
 
-let day = now.date()
+let date = now.date()
+let day = now.day()
 let month = now.month() + 1
 let year = now.year()
 
-function formatDateTime(day, month, year) {
+function formatDateTime(dayWeek, day, month, year) {
   let dateDa;
   let dateMonth;
 
-  if (day === 1) {
+  if (dayWeek === 1) {
     dateDa = "Monday";
-  } else if (day === 2) {
+  } else if (dayWeek === 2) {
     dateDa = "Tuesday";
-  } else if (day === 3) {
+  } else if (dayWeek === 3) {
     dateDa = "Wednesday";
-  } else if (day === 4) {
+  } else if (dayWeek === 4) {
     dateDa = "Thursday";
-  } else if (day === 5) {
+  } else if (dayWeek === 5) {
     dateDa = "Friday";
-  } else if (day === 6) {
+  } else if (dayWeek === 6) {
     dateDa = "Saturday";
-  } else if (day === 7) {
+  } else if (dayWeek === 7) {
     dateDa = "Sunday";
   };
 
@@ -59,12 +73,24 @@ function formatDateTime(day, month, year) {
 };
 
 
-function showDate() {
-  let formatDate = formatDateTime(day, month, year)
-  let hour = now.format("HH:mm:ss");
+function showDate(zone = "America/Caracas") {
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
 
-  currentTimeEl.innerText = hour;
-  currentDateEl.innerText = formatDate;
-}
+  let hour = dayjs().tz(zone).format("HH:mm:ss");
+  let date = dayjs().tz(zone).format("d DD-MM-YYYY");
 
-setInterval(showDate, 1000)
+  let dayWeek = parseInt(date.slice(0));
+  let day = parseInt(date.slice(2, 4));
+  let month = parseInt(date.slice(5, 7));
+  let year = parseInt(date.slice(8, 12));
+
+  let formatDate = formatDateTime(dayWeek, day, month, year);
+
+  currentTimeEl.textContent = hour;
+  currentDateEl.textContent = formatDate;
+  timeZoneName.textContent = zone.split("_").join(" ");
+};
+
+showDate();
+MicroModal.init();

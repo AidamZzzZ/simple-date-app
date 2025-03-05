@@ -11,13 +11,44 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/54b6f92c9a.js" crossorigin="anonymous"></script>
   </head>
   <body>
     <div class="container-date">
-      <p class="timezone">Sudamerica / Venezuela</p>
+      <div class="container-change">
+        <p class="timezone">America / Venezuela</p>
+        <i class="fa-solid fa-pen-to-square" data-micromodal-trigger="modal-1"></i>
+      </div>
       <p class="current-time"></p>
       <p class="current-date"></p>
     </div>
+
+    <div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+      <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+          <header class="modal__header">
+            <h2 class="modal__title" id="modal-1-title">Change Timezone</h2>
+          </header>
+          <main class="modal__content" id="modal-1-content">
+            <label for="select-timezone"></label>
+            <select name="select-timezone" id="select-timezone">
+              <option value="">Pick a timezone</option>
+              <option value="America/Caracas">Venezuela</option>
+              <option value="America/Bogota">Colombia</option>
+              <option value="America/Guayaquil">Ecuador</option>
+              <option value="America/Buenos_Aires">Argentina</option>
+              <option value="America/Mexico_City">Mexico</option>
+              <option value="America/Sao_Paulo">Brasil</option>
+              <option value="America/El_Salvador">El Salvador</option>
+              <option value="America/Santiago">Chile</option>
+              <option value="America/La_Paz">Bolivia</option>
+            </select>
+            <button class="modal__btn apply" data-micromodal-close aria-label="Cerrar">Apply</button>
+          </main>
+        </div>
+      </div>
+  </div>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
